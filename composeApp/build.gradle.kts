@@ -176,13 +176,13 @@ android {
     sourceSets["main"].setRoot("src/androidMain/")
     sourceSets["main"].res.srcDirs("src/androidMain/res", "src/commonMain/resources")
     sourceSets["main"].assets.srcDirs("src/androidMain/assets", "src/commonMain/assets")
-    compileSdk = 34
+    compileSdk = 35
     namespace = artifact
 
     defaultConfig {
         applicationId = artifact
         minSdk = 23
-        targetSdk = 34
+        targetSdk = 35
         versionCode = appVersionCode
         versionName = appVersion
 

@@ -44,7 +44,6 @@ class SyncDialogComponent(
     }
     private val connect = ioScope().connection {
         setPort(7337)
-        noDelay()
     }
 
     init {

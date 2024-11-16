@@ -113,7 +113,6 @@ data object K2Kast : AutoCloseable {
 
         connection = scope.connection {
             setPort(7332)
-            noDelay()
         }
     }
 

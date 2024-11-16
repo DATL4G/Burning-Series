@@ -33,7 +33,6 @@ import dev.datlag.tooling.compose.platform.PlatformCard
 import dev.datlag.tooling.compose.platform.PlatformText
 import dev.datlag.tooling.compose.platform.colorScheme
 import dev.datlag.tooling.compose.platform.typography
-import io.github.aakira.napier.Napier
 
 @Composable
 fun HomeCard(

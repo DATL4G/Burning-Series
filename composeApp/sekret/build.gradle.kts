@@ -93,7 +93,7 @@ kotlin {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
     namespace = "dev.datlag.burningseries.sekret"
 
     defaultConfig {
