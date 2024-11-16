@@ -21,7 +21,10 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +39,7 @@ import dev.datlag.tooling.compose.platform.ProvideNonTvContentColor
 import dev.datlag.tooling.decompose.lifecycle.collectAsStateWithLifecycle
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.StateFlow
+import kotlin.math.roundToLong
 
 @androidx.annotation.OptIn(UnstableApi::class)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,8 +50,6 @@ fun BottomControls(
     modifier: Modifier = Modifier,
 ) {
     val isFinished by playerWrapper.isFinished.collectAsStateWithLifecycle()
-    val progress by playerWrapper.progress.collectAsStateWithLifecycle()
-    val length by playerWrapper.length.collectAsStateWithLifecycle()
 
     AnimatedVisibility(
         modifier = modifier.safeDrawingPadding(),
@@ -62,39 +64,45 @@ fun BottomControls(
         ) {
             ProvideNonTvContentColor {
                 val source = remember { MutableInteractionSource() }
-                val dragging by source.collectIsDraggedAsState()
-                var changingProgress by remember { mutableLongStateOf(progress) }
-                val displayProgress = remember(dragging, progress, changingProgress) {
-                    if (dragging) {
-                        changingProgress
-                    } else {
-                        progress
+                val isDragging by source.collectIsDraggedAsState()
+                val position by playerWrapper.progress.collectAsStateWithLifecycle()
+                val duration by playerWrapper.length.collectAsStateWithLifecycle()
+                var progress by remember { mutableFloatStateOf(0F) }
+                val progressForText by remember(progress, duration) {
+                    derivedStateOf {
+                        duration.times(progress).roundToLong()
+                    }
+                }
+
+                LaunchedEffect(position, duration) {
+                    if (!isDragging) {
+                        progress = if (position <= 0L || duration <= 0L) {
+                            0F
+                        } else {
+                            position.toFloat() / duration.toFloat()
+                        }
                     }
                 }
 
                 PlatformText(
-                    text = displayProgress.toDuration(),
+                    text = progressForText.toDuration(),
                     maxLines = 1
                 )
                 Slider(
                     modifier = Modifier.weight(1F),
-                    value = displayProgress.toFloat(),
-                    valueRange = 0F..length.toFloat(),
+                    value = progress,
                     onValueChange = {
-                        if (dragging) {
-                            changingProgress = it.toLong()
-                            playerWrapper.showControls()
-                        }
+                        playerWrapper.showControls()
+
+                        progress = it
                     },
                     onValueChangeFinished = {
-                        if (dragging) {
-                            playerWrapper.seekTo(changingProgress)
-                        }
+                        playerWrapper.seekTo(duration.times(progress).roundToLong())
                     },
                     interactionSource = source
                 )
                 PlatformText(
-                    text = length.toDuration(),
+                    text = duration.toDuration(),
                     maxLines = 1
                 )
             }

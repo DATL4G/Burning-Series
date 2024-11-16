@@ -1,5 +1,7 @@
 package dev.datlag.burningseries.ui.navigation.screen.video
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.VolumeOff
@@ -19,9 +21,12 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -32,6 +37,7 @@ import dev.datlag.burningseries.common.toDuration
 import dev.datlag.tooling.Platform
 import dev.datlag.tooling.async.scopeCatching
 import dev.datlag.tooling.compose.platform.colorScheme
+import kotlin.math.roundToLong
 
 @Composable
 fun VideoControls(mediaPlayer: MediaPlayer) {
@@ -40,15 +46,34 @@ fun VideoControls(mediaPlayer: MediaPlayer) {
         contentColor = Color.White
     ) {
         val isPlaying by mediaPlayer.isPlaying
-        val time by remember {
+        val interactionSource = remember { MutableInteractionSource() }
+        val isDragging by interactionSource.collectIsDraggedAsState()
+        val position by remember {
             derivedStateOf { mediaPlayer.time.value }
         }
-        val length by remember {
+        val duration by remember {
             derivedStateOf { mediaPlayer.length.value }
         }
+        var progress by remember { mutableFloatStateOf(0F) }
+        val progressForText by remember(progress, duration) {
+            derivedStateOf {
+                duration.times(progress).roundToLong()
+            }
+        }
+
         val isMuted by mediaPlayer.isMuted
         val window = LocalWindow.current
         var originalWindowPlacement = remember { window?.placement ?: WindowPlacement.Floating }
+
+        LaunchedEffect(position, duration) {
+            if (!isDragging) {
+                progress = if (position <= 0L || duration <= 0L) {
+                    0F
+                } else {
+                    position.toFloat() / duration.toFloat()
+                }
+            }
+        }
 
         IconButton(
             onClick = {
@@ -89,16 +114,19 @@ fun VideoControls(mediaPlayer: MediaPlayer) {
             )
         }
         Text(
-            text = time.toDuration(),
+            text = progressForText.toDuration(),
             textAlign = TextAlign.Center
         )
         Slider(
             modifier = Modifier.weight(1F),
-            value = time.toDouble().toFloat(),
+            value = progress,
             onValueChange = {
-                mediaPlayer.seekTo(it.toLong())
+                progress = it
             },
-            valueRange = 0F..length.toDouble().toFloat(),
+            onValueChangeFinished = {
+                mediaPlayer.seekTo(duration.times(progress).roundToLong())
+            },
+            interactionSource = interactionSource,
             colors = SliderDefaults.colors(
                 thumbColor = Platform.colorScheme().primary,
                 activeTrackColor = Platform.colorScheme().primary,
@@ -106,7 +134,7 @@ fun VideoControls(mediaPlayer: MediaPlayer) {
             )
         )
         Text(
-            text = length.toDuration(),
+            text = duration.toDuration(),
             textAlign = TextAlign.Center
         )
         if (window?.placement == WindowPlacement.Fullscreen) {

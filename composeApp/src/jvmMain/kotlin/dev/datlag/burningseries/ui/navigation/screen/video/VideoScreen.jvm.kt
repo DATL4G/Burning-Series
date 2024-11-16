@@ -21,7 +21,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.SwingPanel
@@ -58,14 +63,21 @@ actual fun VideoScreen(component: VideoComponent) {
                 modifier = Modifier.padding(padding).fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
+                var playReady by remember { mutableStateOf(false) }
+
                 SwingPanel(
                     background = Color.Black,
                     modifier = Modifier.fillMaxSize(),
-                    factory = { mediaPlayer.component }
+                    factory = { mediaPlayer.component },
+                    update = {
+                        playReady = true
+                    }
                 )
 
-                SideEffect {
-                    mediaPlayer.startPlaying()
+                LaunchedEffect(playReady) {
+                    if (playReady) {
+                        mediaPlayer.startPlaying()
+                    }
                 }
             }
         }
