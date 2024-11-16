@@ -44,6 +44,9 @@ data object K2Kast : AutoCloseable {
     private var scope: CoroutineScope? = null
     private val connectedHost = MutableStateFlow<Host?>(null)
 
+    private const val DISCOVER_PORT = 7330
+    private const val CONNECTION_PORT = 7332
+
     val code: String by lazy {
         NanoIdUtils.randomNanoId(
             alphabet = "0123456789".toCharArray(),
@@ -91,7 +94,7 @@ data object K2Kast : AutoCloseable {
 
         showClient = scope.discovery {
             setShowTimeout(0L)
-            setPort(7330)
+            setPort(DISCOVER_PORT)
         }
     }
 
@@ -102,7 +105,7 @@ data object K2Kast : AutoCloseable {
 
         searchClient = scope.discovery {
             setSearchTimeout(0L)
-            setPort(7330)
+            setPort(DISCOVER_PORT)
         }
     }
 
@@ -112,7 +115,7 @@ data object K2Kast : AutoCloseable {
         }
 
         connection = scope.connection {
-            setPort(7332)
+            setPort(CONNECTION_PORT)
         }
     }
 

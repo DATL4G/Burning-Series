@@ -1,5 +1,5 @@
 [versions]
-app = "6.0.0"
+app = "6.1.0"
 aboutlibraries = "11.2.3"
 ackpine = "0.8.3"
 activity = "1.9.3"
