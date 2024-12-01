@@ -33,7 +33,10 @@ jobs:
           ./gradlew createSekretProperties -Pkey=FIREBASE_APPLICATION -Pvalue=${{ secrets.FIREBASE_APPLICATION }};
           ./gradlew createSekretProperties -Pkey=FIREBASE_API_KEY -Pvalue=${{ secrets.FIREBASE_API_KEY }}
 
-      - name: Generate Sekret binary
+      - name: Generate Sekrets
+        run: ./gradlew composeApp:generateSekret
+
+      - name: Build Sekret binary
         run: ./gradlew composeApp:createSekretNativeBinary
 
       - name: Copy Sekrets
@@ -109,7 +112,10 @@ jobs:
           gradle createSekretProperties -Pkey=FIREBASE_API_KEY -Pvalue=${{ secrets.FIREBASE_API_KEY }}
         working-directory: ${{ github.workspace }}
 
-      - name: Generate Sekret binary
+      - name: Generate Sekrets
+        run: gradle composeApp:generateSekret
+
+      - name: Build Sekret binary
         run: gradle composeApp:createSekretNativeBinary
         working-directory: ${{ github.workspace }}
 
@@ -166,7 +172,10 @@ jobs:
           ./gradlew createSekretProperties -Pkey=FIREBASE_APPLICATION -Pvalue=${{ secrets.FIREBASE_APPLICATION }};
           ./gradlew createSekretProperties -Pkey=FIREBASE_API_KEY -Pvalue=${{ secrets.FIREBASE_API_KEY }}
 
-      - name: Generate Sekret binary
+      - name: Generate Sekrets
+        run: ./gradlew composeApp:generateSekret
+
+      - name: Build Sekret binary
         run: ./gradlew composeApp:createSekretNativeBinary
 
       - name: Copy Sekrets
@@ -214,7 +223,10 @@ jobs:
           ./gradlew createSekretProperties -Pkey=FIREBASE_APPLICATION -Pvalue=${{ secrets.FIREBASE_APPLICATION }};
           ./gradlew createSekretProperties -Pkey=FIREBASE_API_KEY -Pvalue=${{ secrets.FIREBASE_API_KEY }}
 
-      - name: Generate Sekret binary
+      - name: Generate Sekrets
+        run: ./gradlew composeApp:generateSekret
+
+      - name: Build Sekret binary
         run: ./gradlew composeApp:createSekretNativeBinary
 
       - name: Copy Sekrets
