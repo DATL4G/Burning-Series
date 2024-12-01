@@ -8,7 +8,7 @@ data object BSUtil {
     const val HOST_BS_TO = "bs.to"
     const val SEARCH = "andere-serien"
 
-    val episodeNumberRegex = "[|({]\\s*Ep([.]|isode)?\\s*(\\d+)\\s*[|)}]".toRegex(RegexOption.IGNORE_CASE)
+    val episodeNumberRegex = "[|({]\\s*(Ep([.]|isode)?|Folge)\\s*(\\d+)\\s*[|)}]".toRegex(RegexOption.IGNORE_CASE)
 
     fun getBurningSeriesLink(href: String, http: Boolean = false, host: String = HOST_BS_TO): String {
         return if (!href.matches("^\\w+?://.*".toRegex())) {
