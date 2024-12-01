@@ -38,7 +38,7 @@ kotlin {
         }
 
         androidMain.dependencies {
-            implementation(libs.service)
+            api(libs.service)
         }
     }
 }

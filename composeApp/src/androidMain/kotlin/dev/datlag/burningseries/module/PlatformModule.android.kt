@@ -166,10 +166,8 @@ actual object PlatformModule {
         bindSingleton<AndroidCodeAuthFlowFactory> {
             AndroidCodeAuthFlowFactory()
         }
-        if (!BuildConfig.DEBUG) {
-            bindSingleton<String>(APP_VERSION) {
-                BuildConfig.VERSION_NAME
-            }
+        bindSingleton<String>(APP_VERSION) {
+            BuildConfig.VERSION_NAME
         }
         bindSingleton<String>(DEVICE_NAME) {
             Platform.deviceName(instance())

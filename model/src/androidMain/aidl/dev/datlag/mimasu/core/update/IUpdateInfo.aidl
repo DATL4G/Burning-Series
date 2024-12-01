@@ -5,7 +5,7 @@ interface IUpdateInfo {
 
     boolean required();
 
-    @nullable String playstore();
+    @nullable String storeURL();
 
     @nullable String directDownload();
 }

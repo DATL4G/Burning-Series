@@ -123,7 +123,7 @@
             android:readPermission="dev.datlag.burningseries.READ_DATABASE"
             android:grantUriPermissions="true" />
 
-        <service android:name=".model.common.MimasuUpdateService"
+        <service android:name=".other.MimasuUpdateService"
             android:exported="true">
             <intent-filter>
                 <action android:name="dev.datlag.mimasu.core.update.IUpdateService" />
