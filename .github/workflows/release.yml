@@ -43,8 +43,17 @@ jobs:
         continue-on-error: true
         run: ./gradlew build
 
-      - name: Create package on Ubuntu
-        run: ./gradlew composeApp:packageDeb; ./gradlew composeApp:packageAppImage; ./gradlew composeApp:packageUberJarForCurrentOS
+      - name: Create debian package on Ubuntu
+        continue-on-error: true
+        run: ./gradlew composeApp:packageDeb
+
+      - name: Create AppImage on Ubuntu
+        continue-on-error: true
+        run: ./gradlew composeApp:packageAppImage; ./gradlew composeApp:packageUberJarForCurrentOS
+
+      - name: Create uber jar on Ubuntu
+        continue-on-error: true
+        run: ./gradlew composeApp:packageUberJarForCurrentOS
 
       - name: Create Browser Extensions on Ubuntu
         continue-on-error: true
@@ -113,8 +122,17 @@ jobs:
         run: gradle build
         working-directory: ${{ github.workspace }}
 
-      - name: Package
-        run: gradle composeApp:packageExe; gradle composeApp:packageMsi; gradle composeApp:packageUberJarForCurrentOS
+      - name: Package executable
+        continue-on-error: true
+        run: gradle composeApp:packageExe
+        working-directory: ${{ github.workspace }}
+
+      - name: Package MSI
+        run: gradle composeApp:packageMsi
+        working-directory: ${{ github.workspace }}
+
+      - name: Package uber jar
+        run: gradle composeApp:packageUberJarForCurrentOS
         working-directory: ${{ github.workspace }}
 
       - name: Upload release packages
@@ -158,8 +176,13 @@ jobs:
         continue-on-error: true
         run: ./gradlew build
 
-      - name: Package
-        run: ./gradlew composeApp:packageDmg; ./gradlew composeApp:packageUberJarForCurrentOS
+      - name: Package DMG
+        continue-on-error: true
+        run: ./gradlew composeApp:packageDmg
+
+      - name: Package uber jar
+        continue-on-error: true
+        run: ./gradlew composeApp:packageUberJarForCurrentOS
 
       - name: Upload release packages
         uses: softprops/action-gh-release@v1
