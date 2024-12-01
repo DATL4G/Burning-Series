@@ -52,11 +52,11 @@ abstract class SeriesData {
             else -> {
                 val newTitles = mutableListOf<String>()
                 allTitles.forEach { str ->
-                    val strFlatten = str.replace("\\s".toRegex(RegexOption.MULTILINE), String()).trim()
+                    val strFlatten = str.replace("\\s".toRegex(RegexOption.MULTILINE), "").trim()
 
                     if (newTitles.none {
                             JaroWinkler.distance(str, it) > 0.95 || run {
-                                val itFlatten = it.replace("\\s".toRegex(RegexOption.MULTILINE), String()).trim()
+                                val itFlatten = it.replace("\\s".toRegex(RegexOption.MULTILINE), "").trim()
 
                                 JaroWinkler.distance(strFlatten, itFlatten) > 0.95
                             }

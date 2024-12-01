@@ -101,7 +101,7 @@ data class Series(
         val episodeNumber: String = BSUtil.episodeNumberRegex.find(fullTitle)?.groupValues?.lastOrNull() ?: number
 
         @Transient
-        override val title: String = BSUtil.episodeNumberRegex.replaceFirst(fullTitle, String()).trim().ifBlank { fullTitle }
+        override val title: String = BSUtil.episodeNumberRegex.replaceFirst(fullTitle, "").trim().ifBlank { fullTitle }
 
         @Transient
         val convertedNumber: Int? = episodeNumber.toIntOrNull() ?: episodeNumber.getDigitsOrNull()?.toIntOrNull()
