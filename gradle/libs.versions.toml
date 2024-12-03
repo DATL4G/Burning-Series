@@ -31,11 +31,11 @@ kmpalette = "3.1.0"
 kodein = "7.22.0"
 kolor = "2.0.0"
 konfig = "0.15.2"
-kotlin = "2.1.0"
+kotlin = "2.0.0"
 ksoup = "0.2.0"
-ksp = "2.1.0-1.0.28"
+ksp = "2.0.0-1.0.24"
 ktor = "3.0.1"
-ktorfit = "2.2.0"
+ktorfit = "2.1.0"
 media3 = "1.5.0"
 moko-resources = "0.24.3"
 multidex = "2.0.1"
@@ -106,7 +106,7 @@ ktor-content-negotiation = { group = "io.ktor", name = "ktor-client-content-nego
 ktor-serialization-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-network = { group = "io.ktor", name = "ktor-network", version.ref = "ktor" }
 ktor-network-tls = { group = "io.ktor", name = "ktor-network-tls", version.ref = "ktor" }
-ktorfit = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-lib", version.ref = "ktorfit" }
+ktorfit = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-lib-ktor-3.0.0", version.ref = "ktorfit" }
 ktorfit-ksp = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-ksp", version.ref = "ktorfit" }
 media3 = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3" }
 media3-dash = { group = "androidx.media3", name = "media3-exoplayer-dash", version.ref = "media3" }

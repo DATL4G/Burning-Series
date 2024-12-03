@@ -9,6 +9,7 @@ import coil3.annotation.DelicateCoilApi
 import dev.datlag.burningseries.module.NetworkModule
 import dev.datlag.burningseries.other.StateSaver
 import dev.datlag.sekret.NativeLoader
+import dev.datlag.tooling.scopeCatching
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import org.kodein.di.DI
@@ -44,7 +45,11 @@ class App : MultiDexApplication(), DIAware {
                     .build()
             )
         }
-        StateSaver.sekretLibraryLoaded = NativeLoader.loadLibrary("sekret")
+        StateSaver.sekretLibraryLoaded = NativeLoader.loadLibrary("sekret") || scopeCatching {
+            System.loadLibrary("sekret")
+        }.onFailure {
+            Napier.e("Sekret loading error", it)
+        }.isSuccess
 
         val imageLoader by di.instance<ImageLoader>()
         SingletonImageLoader.setUnsafe(imageLoader)
