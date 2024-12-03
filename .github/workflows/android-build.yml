@@ -27,7 +27,13 @@ jobs:
           ./gradlew createSekretProperties -Pkey=FIREBASE_APPLICATION -Pvalue=${{ secrets.FIREBASE_APPLICATION }};
           ./gradlew createSekretProperties -Pkey=FIREBASE_API_KEY -Pvalue=${{ secrets.FIREBASE_API_KEY }}
 
-      - name: Generate Sekret binary
+      - name: Generate Sekrets
+        run: ./gradlew composeApp:generateSekret
+
+      - name: Downgrade Sekret (for shitty Samsung phones)
+        run: sed -i 's/sekret = "2.0.0-alpha-08"/sekret = "2.0.0-alpha-07"/' ./gradle/libs.versions.toml
+
+      - name: Build Sekret binary
         run: ./gradlew composeApp:createSekretNativeBinary
 
       - name: Copy Sekrets
